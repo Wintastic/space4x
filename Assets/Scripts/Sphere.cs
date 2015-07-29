@@ -4,11 +4,12 @@ using System.Collections;
 public abstract class Sphere : MonoBehaviour
 {
 
-	public static void createSphere(Vector3 center, float radius, int longitudeSegments, int latitudeSegments, Material material) {
+	public static GameObject createSphere(Vector3 center, float radius, int longitudeSegments, int latitudeSegments, Material material) {
 		GameObject s = new GameObject();
 		s.transform.position = center;
 		updateSphere(s, radius, longitudeSegments, latitudeSegments);
 		setMaterial(s, material);
+		return s;
 	}
 
 	private static void updateSphere(GameObject s, float radius, int longitudeSegments, int latitudeSegments) {
