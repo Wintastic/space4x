@@ -15,6 +15,7 @@ public class Startup : MonoBehaviour {
 		l.intensity = 5;
 
 		for(int i = 0; i < 10; i++) {
+			// TODO Change x/z random to randomize within a radius of sun instead of square
 			int x = Random.Range(-200, 200);
 			int y = 0;
 			int z = Random.Range(-200, 200);
@@ -26,7 +27,8 @@ public class Startup : MonoBehaviour {
 			spinScript.speed = Random.Range(-20, 20);
 
 			Orbit orbitScript = s.AddComponent<Orbit>();
-			orbitScript.speed = Random.Range(1, 10);
+			float distance = Vector3.Distance(s.transform.position, sun.transform.position);
+			orbitScript.speed = 100f / distance;
 			orbitScript.point = sun.transform.position;
 		}	
 	}
