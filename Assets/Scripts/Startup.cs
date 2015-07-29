@@ -5,7 +5,7 @@ public class Startup : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Material earthMaterial = Resources.Load("Materials/Earth") as Material;
+		Material earthMaterial = Resources.Load("Materials/Earth/Earth") as Material;
 		Material sunMaterial = Resources.Load("Materials/Sun") as Material;
 		GameObject sun = Sphere.createSphere(new Vector3(0, 0, 0), 10, 240, 160, sunMaterial);
 		GameObject sunLight = new GameObject();
