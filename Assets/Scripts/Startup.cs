@@ -23,7 +23,13 @@ public class Startup : MonoBehaviour {
 
 			GameObject s = Sphere.createSphere(new Vector3(x, y, z), r, 240, 160, earthMaterial);
 
+			Spin spinScript = s.AddComponent<Spin>();
+			spinScript.speed = Random.Range(-20, 20);
 
+			Orbit orbitScript = s.AddComponent<Orbit>();
+			float distance = Vector3.Distance(s.transform.position, sun.transform.position);
+			orbitScript.speed = 100f / distance;
+			orbitScript.point = sun.transform.position;
 		}	
 	}
 }
