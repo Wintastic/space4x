@@ -1,19 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
-public abstract class Sphere : MonoBehaviour
-{
+public class Sphere {
+	public GameObject gameObject;
 
-	public static GameObject createSphere(Vector3 center, float radius, int longitudeSegments, int latitudeSegments, Material material) {
-		GameObject s = new GameObject();
-		s.transform.position = center;
-		updateSphere(s, radius, longitudeSegments, latitudeSegments);
-		setMaterial(s, material);
-		return s;
+	public Sphere(string name, Vector3 center, float radius, int longitudeSegments, int latitudeSegments, Material material) {
+		gameObject = new GameObject(name + "Sphere");
+		gameObject.transform.position = center;
+		buildSphere(radius, longitudeSegments, latitudeSegments);
+		gameObject.AddComponent<MeshRenderer>().material = material;
 	}
 
-	private static void updateSphere(GameObject s, float radius, int longitudeSegments, int latitudeSegments) {
-		MeshFilter filter = s.AddComponent< MeshFilter >();
+	private void buildSphere(float radius, int longitudeSegments, int latitudeSegments) {
+		MeshFilter filter = gameObject.AddComponent< MeshFilter >();
 		Mesh mesh = filter.mesh;
 		mesh.Clear();
 		
@@ -107,9 +106,5 @@ public abstract class Sphere : MonoBehaviour
 		mesh.Optimize();
 	}
 
-	private static void setMaterial(GameObject s, Material m) {
-		MeshRenderer r = s.AddComponent<MeshRenderer>();
-		r.material = m;
-	}
 }
 
