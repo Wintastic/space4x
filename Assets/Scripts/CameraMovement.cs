@@ -31,7 +31,7 @@ public class CameraMovement : MonoBehaviour {
 		}
 		
 		if (Input.GetMouseButton(2)){
-			Vector3 delta = Input.mousePosition - lastPosition;
+			Vector3 delta = lastPosition - Input.mousePosition;
 			transform.Translate(delta.x * mouseSensitivity * panSpeed, delta.y * mouseSensitivity * panSpeed, 0);
 			lastPosition = Input.mousePosition;
 		}

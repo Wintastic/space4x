@@ -7,7 +7,5 @@ public abstract class Body {
 	public Body(string name) {
 		this.name = name;
 	}
-
-	public abstract Vector3 getPosition();
 }
 

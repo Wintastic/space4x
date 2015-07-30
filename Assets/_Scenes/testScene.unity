@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 1
+  panSpeed: 1
   zoomSpeed: 50
 --- !u!1 &1965668483
 GameObject:

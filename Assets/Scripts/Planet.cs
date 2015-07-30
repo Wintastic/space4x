@@ -2,20 +2,25 @@ using UnityEngine;
 using System.Collections;
 
 public class Planet : Body {
-	private int radius;
-	private Sphere sphere;
+	private float radius;
+	public Sphere sphere;
+	private IList satellites;
 
-	public Planet(string name, Vector3 position, int radius, Material material, float spinSpeed, Star star) : base(name) {
+	public Planet(string name, Vector3 position, float radius, Material material, float spinSpeed, Star star) : base(name) {
 		this.radius = radius;
 		this.sphere = new Sphere(name, position, radius, Constants.planetLongitudeSegments, Constants.planetLatitudeSegments, material);
 		this.sphere.gameObject.AddComponent<Spin>().speed = spinSpeed;
 		Orbit orbit = this.sphere.gameObject.AddComponent<Orbit>();
-		orbit.point = star.getPosition();
-		float distance = Vector3.Distance(getPosition(), star.getPosition());
+		orbit.center = star.sphere.gameObject;
+		float distance = Vector3.Distance(sphere.gameObject.transform.position, star.sphere.gameObject.transform.position);
 		orbit.speed = Constants.planetOrbitConstant / distance;
+		satellites = new ArrayList();
+
+		sphere.gameObject.transform.SetParent(star.sphere.gameObject.transform);
 	}
 
-	public override Vector3 getPosition() {
-		return this.sphere.gameObject.transform.position;
+	public void addSatellite(string name, Vector3 position, float radius, Material material, float spinSpeed) {
+		Satellite s = new Satellite(name, position, radius, material, spinSpeed, this);
+		this.satellites.Add(s);
 	}
 }

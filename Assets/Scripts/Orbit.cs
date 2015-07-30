@@ -4,11 +4,19 @@ using System.Collections;
 public class Orbit : MonoBehaviour {
 	
 	public float speed = 10f;
-	public Vector3 point = Vector3.zero;
+	public GameObject center;
+
 	
 	void Update () {
-		//TODO: change to calculation based on difference in y of the two objects
-		Vector3 axis = Vector3.up;
-		transform.RotateAround(point, axis, speed * Time.deltaTime);		
+		float centerSpinSpeed = 0;
+		if(center.GetComponent<Spin>() != null) {
+			centerSpinSpeed = center.GetComponent<Spin>().speed;
+		}
+		transform.position = rotateAroundPivot(transform.position, transform.parent.position, 
+		                                       Quaternion.Euler(0, (speed - centerSpinSpeed) * Time.deltaTime, 0));
+	}
+
+	private Vector3 rotateAroundPivot(Vector3 point, Vector3 pivot, Quaternion angle) {
+		return angle * (point - pivot) + pivot;
 	}
 }
