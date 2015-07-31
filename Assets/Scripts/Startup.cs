@@ -32,6 +32,12 @@ public class Startup : MonoBehaviour {
 				float satelliteSpinSpeed = Random.Range(-20, 21);
 				p.addSatellite("Satellite"+j+p.name,satellitePosition, satelliteRadius, moonMaterial, satelliteSpinSpeed);
 			}
-		}	
+		}
+
+		startUI();
+	}
+
+	void startUI() {
+		GameObject.Find("SimpleHoverInfoCanvas").GetComponent<Canvas>().enabled = false;
 	}
 }

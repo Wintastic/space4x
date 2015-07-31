@@ -64,7 +64,7 @@ public class CameraMovement : MonoBehaviour {
 	void clampCamera(){
 		float x = Mathf.Clamp(transform.position.x, -200, 200);
 		float y = Mathf.Clamp(transform.position.y, 0, 100);
-		float z = Mathf.Clamp(transform.position.z, -200, 0);
+		float z = Mathf.Clamp(transform.position.z, -200, 200);
 		transform.position = new Vector3(x, y, z);
 	}
 }

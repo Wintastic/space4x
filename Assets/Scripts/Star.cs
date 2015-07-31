@@ -16,5 +16,7 @@ public class Star : Body {
 		//TODO: set range and intensity based on size and strength
 		l.range = 1000;
 		l.intensity = 1;
+
+		SimpleHoverInfo simpleHoverInfo = this.sphere.gameObject.AddComponent<SimpleHoverInfo>();
 	}
 }
