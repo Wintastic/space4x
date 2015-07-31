@@ -9,6 +9,9 @@ public class Sphere {
 		gameObject.transform.position = center;
 		buildSphere(radius, longitudeSegments, latitudeSegments);
 		gameObject.AddComponent<MeshRenderer>().material = material;
+		SphereCollider collider =  gameObject.AddComponent<SphereCollider>();
+		collider.radius = radius;
+
 	}
 
 	private void buildSphere(float radius, int longitudeSegments, int latitudeSegments) {
