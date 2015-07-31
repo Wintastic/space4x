@@ -26,6 +26,8 @@ public class Orbit : MonoBehaviour {
 
 		orbit.transform.position += center.transform.position - prevCenterPosition;
 		prevCenterPosition = center.transform.position;
+		float w = Vector3.Distance(GameObject.Find("Main Camera").transform.position, center.transform.position) / 400;
+		orbit.GetComponent<LineRenderer>().SetWidth(w, w);
 	}
 
 	void OnMouseOver() {
