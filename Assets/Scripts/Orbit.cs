@@ -10,6 +10,9 @@ public class Orbit : MonoBehaviour {
 	private GameObject orbit;
 	private Vector3 prevCenterPosition;
 
+	private Color c1 = new Color(0.24f,0.70f,1f, 0.9f);
+	private Color c2 = new Color(0.24f,0.70f,1f, 0.1f);
+
 	void Start() {
 		addOrbitIndicator();
 		prevCenterPosition = center.transform.position;
@@ -31,11 +34,11 @@ public class Orbit : MonoBehaviour {
 	}
 
 	void OnMouseOver() {
-		orbit.GetComponent<LineRenderer>().enabled = true;
+		orbit.GetComponent<LineRenderer>().SetColors(c1, c1);
 	}
 
 	void OnMouseExit() {
-		orbit.GetComponent<LineRenderer>().enabled = false;
+		orbit.GetComponent<LineRenderer>().SetColors(c2, c2);
 	}
 
 	private Vector3 rotateAroundPivot(Vector3 point, Vector3 pivot, Quaternion angle) {
@@ -44,17 +47,14 @@ public class Orbit : MonoBehaviour {
 
 	private void addOrbitIndicator() {
 		orbit = new GameObject();
-		//orbit.transform.SetParent(transform);
 
-		Color c = new Color(0.24f,0.70f,1f);
 		float radius = Vector3.Distance(transform.position, center.transform.position);
 		int segments = 100 + (int)radius;
 
 		LineRenderer r = orbit.AddComponent<LineRenderer>();
-		r.enabled = false;
 		r.useWorldSpace = false;
 		r.material = new Material(Shader.Find("Particles/Additive"));
-		r.SetColors(c, c);
+		r.SetColors(c2, c2);
 		r.SetWidth(0.2f, 0.2f);
 		r.SetVertexCount(segments+1);
 		
