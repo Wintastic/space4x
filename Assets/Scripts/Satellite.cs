@@ -17,6 +17,8 @@ public class Satellite : Body {
 		sphere.gameObject.transform.SetParent(planet.sphere.gameObject.transform);
 
 		SimpleHoverInfo simpleHoverInfo = this.sphere.gameObject.AddComponent<SimpleHoverInfo>();
+		simpleHoverInfo.bodyRadius = radius;
+
 		DetailedView detailedView = this.sphere.gameObject.AddComponent<DetailedView>();
 		detailedView.bodyRadius = radius;
 	}

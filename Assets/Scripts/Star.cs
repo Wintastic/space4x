@@ -18,6 +18,8 @@ public class Star : Body {
 		l.intensity = 1;
 
 		SimpleHoverInfo simpleHoverInfo = this.sphere.gameObject.AddComponent<SimpleHoverInfo>();
+		simpleHoverInfo.bodyRadius = radius;
+
 		DetailedView detailedView = this.sphere.gameObject.AddComponent<DetailedView>();
 		detailedView.bodyRadius = radius;
 	}
