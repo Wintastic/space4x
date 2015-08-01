@@ -19,6 +19,7 @@ public class Planet : Body {
 		sphere.gameObject.transform.SetParent(star.sphere.gameObject.transform);
 
 		SimpleHoverInfo simpleHoverInfo = this.sphere.gameObject.AddComponent<SimpleHoverInfo>();
+		simpleHoverInfo.bodyRadius = radius;
 	}
 
 	public void addSatellite(string name, Vector3 position, float radius, Material material, float spinSpeed) {

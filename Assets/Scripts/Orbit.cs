@@ -7,38 +7,51 @@ public class Orbit : MonoBehaviour {
 	public GameObject center;
 	public bool drawOrbitOnHover = true;
 
-	private GameObject orbit;
+	private GameObject orbitIndicator;
 	private Vector3 prevCenterPosition;
 
 	private Color c1 = new Color(0.24f,0.70f,1f, 0.9f);
 	private Color c2 = new Color(0.24f,0.70f,1f, 0.1f);
 
+	private Spin spin;
+	private LineRenderer orbitRenderer;
+	private Transform orbitTransform;
+	private Transform gameObjectTransform;
+	private Transform centerTransform;
+	private Transform cameraTransform;
+
 	void Start() {
 		addOrbitIndicator();
 		prevCenterPosition = center.transform.position;
+		spin = center.GetComponent<Spin>();
+		orbitTransform = orbitIndicator.transform;
+		gameObjectTransform = transform;
+		centerTransform = center.transform;
+		cameraTransform = Camera.main.transform;
+		orbitRenderer = orbitIndicator.GetComponent<LineRenderer>();
 	}
 
 	
 	void Update () {
 		float centerSpinSpeed = 0;
-		if(center.GetComponent<Spin>() != null) {
-			centerSpinSpeed = center.GetComponent<Spin>().speed;
+		if(spin != null) {
+			centerSpinSpeed = spin.speed;
 		}
-		transform.position = rotateAroundPivot(transform.position, transform.parent.position, 
+		gameObjectTransform.position = rotateAroundPivot(gameObjectTransform.position, gameObjectTransform.parent.position, 
 		                                       Quaternion.Euler(0, (speed - centerSpinSpeed) * Time.deltaTime, 0));
 
-		orbit.transform.position += center.transform.position - prevCenterPosition;
-		prevCenterPosition = center.transform.position;
-		float w = Vector3.Distance(Camera.main.transform.position, center.transform.position) / 400;
-		orbit.GetComponent<LineRenderer>().SetWidth(w, w);
+		orbitTransform.position += centerTransform.position - prevCenterPosition;
+		prevCenterPosition = centerTransform.position;
+		float w = Vector3.Distance(cameraTransform.position, centerTransform.position) / 400;
+		orbitRenderer.SetWidth(w, w);
 	}
 
 	void OnMouseOver() {
-		orbit.GetComponent<LineRenderer>().SetColors(c1, c1);
+		orbitRenderer.SetColors(c1, c1);
 	}
 
 	void OnMouseExit() {
-		orbit.GetComponent<LineRenderer>().SetColors(c2, c2);
+		orbitRenderer.SetColors(c2, c2);
 	}
 
 	private Vector3 rotateAroundPivot(Vector3 point, Vector3 pivot, Quaternion angle) {
@@ -46,12 +59,12 @@ public class Orbit : MonoBehaviour {
 	}
 
 	private void addOrbitIndicator() {
-		orbit = new GameObject();
+		orbitIndicator = new GameObject();
 
 		float radius = Vector3.Distance(transform.position, center.transform.position);
 		int segments = 100 + (int)radius;
 
-		LineRenderer r = orbit.AddComponent<LineRenderer>();
+		LineRenderer r = orbitIndicator.AddComponent<LineRenderer>();
 		r.useWorldSpace = false;
 		r.material = new Material(Shader.Find("Particles/Additive"));
 		r.SetColors(c2, c2);
