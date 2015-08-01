@@ -28,12 +28,10 @@ public class CameraMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(!exitingDetailedView) {
-			panCamera ();
-			zoomCamera();
-			if(!inDetailedView) {
-				clampCamera();
-			}
+		panCamera ();
+		zoomCamera();
+		if(!inDetailedView) {
+			clampCamera();
 		}
 
 		updateDetailedView();
