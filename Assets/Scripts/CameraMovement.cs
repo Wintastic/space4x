@@ -3,13 +3,15 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 
+	private Transform myTransform;
+
 	private Vector3 initialPosition = new Vector3(0, 80, -120);
 
 	public float mouseSensitivity = 1.0f;
 	public float zoomSpeed = 50.0f;
 	private Vector3 lastPosition;
 
-	private GameObject focusedObject = null;
+	private Transform focusedObjectTransform = null;
 	private float focusedObjectRadius = 0;
 	private Vector3 prevFocusedObjectPosition = Vector3.zero;
 	private bool inDetailedView = false;
@@ -20,9 +22,11 @@ public class CameraMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		gameObject.transform.position = initialPosition;
-		gameObject.transform.localEulerAngles = new Vector3(30, 0, 0);
-		prevPosition = transform.position;
+		myTransform = transform;
+
+		myTransform.position = initialPosition;
+		myTransform.localEulerAngles = new Vector3(30, 0, 0);
+		prevPosition = myTransform.position;
 	}
 
 	// Update is called once per frame
@@ -34,11 +38,11 @@ public class CameraMovement : MonoBehaviour {
 		}
 
 		updateDetailedView();
-		prevPosition = transform.position;
+		prevPosition = myTransform.position;
 	}
 
 	void panCamera() {
-		float panSpeed = 0.01f + transform.position.y / 200f;
+		float panSpeed = 0.01f + myTransform.position.y / 200f;
 		float keyboardPanSpeed = panSpeed * 2;
 
 		//Mouse panning
@@ -48,76 +52,76 @@ public class CameraMovement : MonoBehaviour {
 		
 		if (Input.GetMouseButton(2)){
 			Vector3 delta = lastPosition - Input.mousePosition;
-			transform.Translate(delta.x * mouseSensitivity * panSpeed, delta.y * mouseSensitivity * panSpeed, 0);
+			myTransform.Translate(delta.x * mouseSensitivity * panSpeed, delta.y * mouseSensitivity * panSpeed, 0);
 			lastPosition = Input.mousePosition;
 		}
 
 		//Arrow key panning
 		if (Input.GetKey(KeyCode.UpArrow)) {
-			transform.Translate(0, 1 * keyboardPanSpeed, 0);
+			myTransform.Translate(0, 1 * keyboardPanSpeed, 0);
 		}
 		if (Input.GetKey(KeyCode.DownArrow)) {
-			transform.Translate(0, -1 * keyboardPanSpeed, 0);
+			myTransform.Translate(0, -1 * keyboardPanSpeed, 0);
 		}
 		if (Input.GetKey(KeyCode.LeftArrow)) {
-			transform.Translate(-1 * keyboardPanSpeed, 0, 0);
+			myTransform.Translate(-1 * keyboardPanSpeed, 0, 0);
 		}
 		if (Input.GetKey(KeyCode.RightArrow)) {
-			transform.Translate(1 * keyboardPanSpeed, 0, 0);
+			myTransform.Translate(1 * keyboardPanSpeed, 0, 0);
 		}
 
 		//Prevent changes in Z position
-		transform.position = new Vector3(transform.position.x, transform.position.y, prevPosition.z);
+		myTransform.position = new Vector3(myTransform.position.x, myTransform.position.y, prevPosition.z);
 	}
 
 	void zoomCamera(){
 		float scrollWheelDelta = Input.GetAxis("Mouse ScrollWheel");
 		if (scrollWheelDelta != 0f) {
-			transform.Translate(Vector3.forward*zoomSpeed*scrollWheelDelta);
+			myTransform.Translate(Vector3.forward*zoomSpeed*scrollWheelDelta);
 		}
 	}
 
 	void clampCamera(){
-		float x = Mathf.Clamp(transform.position.x, -200, 200);
-		float y = Mathf.Clamp(transform.position.y, 0, 100);
-		float z = Mathf.Clamp(transform.position.z, -200, 200);
-		transform.position = new Vector3(x, y, z);
+		float x = Mathf.Clamp(myTransform.position.x, -200, 200);
+		float y = Mathf.Clamp(myTransform.position.y, 0, 100);
+		float z = Mathf.Clamp(myTransform.position.z, -200, 200);
+		myTransform.position = new Vector3(x, y, z);
 	}
 
-	public void enterDetailedView(GameObject body, float bodyRadius) {
-		focusedObject = body;
+	public void enterDetailedView(Transform bodyTransform, float bodyRadius) {
+		focusedObjectTransform = bodyTransform;
 		focusedObjectRadius = bodyRadius;
-		prevFocusedObjectPosition = focusedObject.transform.position;
+		prevFocusedObjectPosition = focusedObjectTransform.position;
 		inDetailedView = true;
 	}
 
 	public void exitDetailedView() {
 		inDetailedView = false;
-		focusedObject = null;
+		focusedObjectTransform = null;
 		prevFocusedObjectPosition = Vector3.zero;
 		exitingDetailedView = true;
 	}
 
 	private void updateDetailedView() {
-		if((inDetailedView || exitingDetailedView) && transform.position != prevPosition) {
+		if((inDetailedView || exitingDetailedView) && myTransform.position != prevPosition) {
 			exitDetailedView();
 			exitingDetailedView = false;
 		}
 
 		if(inDetailedView) {
-			Vector3 target = focusedObject.transform.position + new Vector3(0,focusedObjectRadius*2,focusedObjectRadius*-4);
-			transform.position = moveTo(transform.position, target, ref velocity, 0.5f, true);
+			Vector3 target = focusedObjectTransform.position + new Vector3(0,focusedObjectRadius*2,focusedObjectRadius*-4);
+			myTransform.position = moveTo(myTransform.position, target, ref velocity, 0.5f, true);
 		} else if(exitingDetailedView) {
-			transform.position = moveTo(transform.position, initialPosition, ref velocity, 0.5f, false);
-			if(Vector3.Distance(transform.position, initialPosition) < 0.1f) {
+			myTransform.position = moveTo(myTransform.position, initialPosition, ref velocity, 0.5f, false);
+			if(Vector3.Distance(myTransform.position, initialPosition) < 0.1f) {
 				exitingDetailedView = false;
 			}
 		}
 		if(Input.GetKeyDown("escape")) {
 			exitDetailedView();
 		}
-		if(focusedObject != null) {
-			prevFocusedObjectPosition = focusedObject.transform.position;
+		if(focusedObjectTransform != null) {
+			prevFocusedObjectPosition = focusedObjectTransform.position;
 		}
 
 	}

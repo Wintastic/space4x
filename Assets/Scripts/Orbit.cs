@@ -5,6 +5,7 @@ public class Orbit : MonoBehaviour {
 	
 	public float speed = 10f;
 	public GameObject center;
+	float centerSpinSpeed;
 	public bool drawOrbitOnHover = true;
 
 	private GameObject orbitIndicator;
@@ -13,19 +14,22 @@ public class Orbit : MonoBehaviour {
 	private Color c1 = new Color(0.24f,0.70f,1f, 0.9f);
 	private Color c2 = new Color(0.24f,0.70f,1f, 0.1f);
 
-	private Spin spin;
 	private LineRenderer orbitRenderer;
-	private Transform orbitTransform;
-	private Transform gameObjectTransform;
+
+	private Transform myTransform;
+	private Transform orbitIndicatorTransform;
 	private Transform centerTransform;
 	private Transform cameraTransform;
 
 	void Start() {
 		addOrbitIndicator();
 		prevCenterPosition = center.transform.position;
-		spin = center.GetComponent<Spin>();
-		orbitTransform = orbitIndicator.transform;
-		gameObjectTransform = transform;
+		centerSpinSpeed = 0;
+		if(center.GetComponent<Spin>() != null) {
+			centerSpinSpeed = center.GetComponent<Spin>().speed;
+		}
+		orbitIndicatorTransform = orbitIndicator.transform;
+		myTransform = transform;
 		centerTransform = center.transform;
 		cameraTransform = Camera.main.transform;
 		orbitRenderer = orbitIndicator.GetComponent<LineRenderer>();
@@ -33,14 +37,10 @@ public class Orbit : MonoBehaviour {
 
 	
 	void Update () {
-		float centerSpinSpeed = 0;
-		if(spin != null) {
-			centerSpinSpeed = spin.speed;
-		}
-		gameObjectTransform.position = rotateAroundPivot(gameObjectTransform.position, gameObjectTransform.parent.position, 
+		myTransform.position = rotateAroundPivot(myTransform.position, centerTransform.position, 
 		                                       Quaternion.Euler(0, (speed - centerSpinSpeed) * Time.deltaTime, 0));
 
-		orbitTransform.position += centerTransform.position - prevCenterPosition;
+		orbitIndicatorTransform.position += centerTransform.position - prevCenterPosition;
 		prevCenterPosition = centerTransform.position;
 		float w = Vector3.Distance(cameraTransform.position, centerTransform.position) / 400;
 		orbitRenderer.SetWidth(w, w);
