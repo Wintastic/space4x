@@ -122,7 +122,6 @@ public class CameraMovement : MonoBehaviour {
 		if(follow && d < 5) {
 			newPoint = Vector3.SmoothDamp(newPoint, destination, ref velocity, 0.1f);
 		}
-		print (d);
 		return newPoint;
 	}
 }
