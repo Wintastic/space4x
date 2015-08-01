@@ -89,9 +89,16 @@ public class CameraMovement : MonoBehaviour {
 		inDetailedView = true;
 	}
 
+	public void exitDetailedView() {
+		inDetailedView = false;
+		focusedObject = null;
+		prevFocusedObjectPosition = Vector3.zero;
+		exitingDetailedView = true;
+	}
+
 	private void updateDetailedView() {
-		if(transform.position != prevPosition) {
-			inDetailedView = false;
+		if((inDetailedView || exitingDetailedView) && transform.position != prevPosition) {
+			exitDetailedView();
 			exitingDetailedView = false;
 		}
 
@@ -102,13 +109,10 @@ public class CameraMovement : MonoBehaviour {
 			transform.position = moveTo(transform.position, initialPosition, ref velocity, 0.5f, false);
 			if(Vector3.Distance(transform.position, initialPosition) < 0.1f) {
 				exitingDetailedView = false;
-				focusedObject = null;
 			}
 		}
 		if(Input.GetKeyDown("escape")) {
-			inDetailedView = false;
-			focusedObject = null;
-			exitingDetailedView = true;			
+			exitDetailedView();
 		}
 		if(focusedObject != null) {
 			prevFocusedObjectPosition = focusedObject.transform.position;
