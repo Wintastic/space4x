@@ -6,7 +6,6 @@ public class CameraMovement : MonoBehaviour {
 	private Vector3 initialPosition = new Vector3(0, 80, -120);
 
 	public float mouseSensitivity = 1.0f;
-	public float panSpeed = 1.0f;
 	public float zoomSpeed = 50.0f;
 	private Vector3 lastPosition;
 
@@ -39,6 +38,9 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	void panCamera() {
+		float panSpeed = 0.01f + transform.position.y / 200f;
+		float keyboardPanSpeed = panSpeed * 2;
+
 		//Mouse panning
 		if (Input.GetMouseButtonDown(2)) {
 			lastPosition = Input.mousePosition;
@@ -52,16 +54,16 @@ public class CameraMovement : MonoBehaviour {
 
 		//Arrow key panning
 		if (Input.GetKey(KeyCode.UpArrow)) {
-			transform.Translate(0, 1 * panSpeed, 0);
+			transform.Translate(0, 1 * keyboardPanSpeed, 0);
 		}
 		if (Input.GetKey(KeyCode.DownArrow)) {
-			transform.Translate(0, -1 * panSpeed, 0);
+			transform.Translate(0, -1 * keyboardPanSpeed, 0);
 		}
 		if (Input.GetKey(KeyCode.LeftArrow)) {
-			transform.Translate(-1 * panSpeed, 0, 0);
+			transform.Translate(-1 * keyboardPanSpeed, 0, 0);
 		}
 		if (Input.GetKey(KeyCode.RightArrow)) {
-			transform.Translate(1 * panSpeed, 0, 0);
+			transform.Translate(1 * keyboardPanSpeed, 0, 0);
 		}
 
 		//Prevent changes in Z position
